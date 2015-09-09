@@ -12,10 +12,10 @@ HL_DIFF = 30
 minLineHeight = 10
 maxLineHeight = min(W, min(H, 50) )
 
+
 def down(i,j):
 	y=i; x=j;
 	curve = ()
-	value = (img[i,j],)
 
 	# find top edge
 	c=0;M=0
@@ -25,11 +25,16 @@ def down(i,j):
 	else:
 		while( img[i,j] >= LOW_THRED and i>=0 ):
 			i -= 1; c-=1
+
+		# fix by add 1 if looked back, so we stand on right pix
+		if c<0 :
+			c+=1; i+=1
+
 	curve+=(c,)
+	value = (img[i,j],)
 
 
 	# find LightUp List
-	value+=(img[i,j],)
 	c=0;M=0
 	while( i+1<H and img[i,j] < img[i+1,j] ):
 		if i>=H: break
@@ -37,6 +42,7 @@ def down(i,j):
 
 
 	curve+=(c,)
+	value+=(img[i,j],)
 
 
 
@@ -65,15 +71,16 @@ def down(i,j):
 	value+=(M,)
 
 
-	
+
 	imgA = img[y+curve[0]:y+sum(curve[:])+1, x]
 	valid = sum(curve[1:])
 
-	print x,y,valid, curve,value, imgA, sum(imgA),
-	if len(imgA) : 
-		print np.mean(imgA), np.std(imgA)
+	print x,y, '\t', valid, '\t', curve, '\t',sum(imgA),
+	if len(imgA) :
+		print int(np.mean(imgA)),'\t',  int(np.std(imgA)),
 	else:
-		print
+		print "",
+	print  value,  imgA
 
 	return curve, value
 
@@ -87,6 +94,11 @@ def patLine(y,x):
 	curve,value = down(y,x-3)
 	curve,value = down(y,x-4)
 	curve,value = down(y,x-5)
+	curve,value = down(y,x-6)
+	curve,value = down(y,x-7)
+	curve,value = down(y,x-8)
+	curve,value = down(y,x-9)
+	curve,value = down(y,x-10)
 
 
 
@@ -102,7 +114,7 @@ print row,col
 curRow = 0
 curCol = 0
 
-patLine(0,39)
+patLine(3,13)
 
 for i in range(row):
 	#print i,img[i]
