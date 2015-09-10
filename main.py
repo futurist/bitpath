@@ -86,22 +86,20 @@ def down(i,j):
 
 
 def patLine(y,x):
-	slop = 45	# 30 deg max in left or right
-	# curve,value = down(y,x+1)
-	curve,value = down(y,x)
-	curve,value = down(y,x-1)
-	curve,value = down(y,x-2)
-	curve,value = down(y,x-3)
-	curve,value = down(y,x-4)
-	curve,value = down(y,x-5)
-	curve,value = down(y,x-6)
-	curve,value = down(y,x-7)
-	curve,value = down(y,x-8)
-	curve,value = down(y,x-9)
-	curve,value = down(y,x-10)
 
+	shapeA = ()
+	while( x>=0 and x<=W ):
+		curve,value = down(y,x)
+		imgA = img[ y+curve[0] : y+sum(curve[:])+1, x]
+		valid = sum(curve[1:])
+		if not valid :
+			break
+		else:
+			x-=1
+			shapeA += ( curve[0], valid, int(sum(imgA)), int(np.mean(imgA)) )
 
-
+	shapeA = np.array(shapeA).reshape(-1, 4)
+	print shapeA[:,2], np.mean( shapeA[:,2] )
 
 
 # cv2.imwrite('aa2.jpg', np.fromfunction(f, img.shape ,dtype=int)  )
@@ -114,7 +112,7 @@ print row,col
 curRow = 0
 curCol = 0
 
-patLine(3,13)
+patLine(3,12)
 
 for i in range(row):
 	#print i,img[i]
